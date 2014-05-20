@@ -7,7 +7,7 @@
 
 
 from qds_sdk.qubole import Qubole
-from qds_sdk.commands import *
+from qds_sdk.commands import HadoopCommand
 import qds_sdk.exception
 
 import sys
@@ -39,12 +39,27 @@ def main():
 
     Qubole.configure(api_token=api_token)
 
-    args = HadoopCommand.parse(("streaming -files s3n://paid-qubole/HadoopAPIExamples/WordCountPython/mapper.py,s3n://paid-qubole/HadoopAPIExamples/WordCountPython/reducer.py -mapper mapper.py -reducer reducer.py -numReduceTasks 1 -input s3n://paid-qubole/default-datasets/gutenberg -output %s" % output_path).split())
+    files = [
+        's3n://paid-qubole/HadoopAPIExamples/WordCountPython/mapper.py',
+        's3n://paid-qubole/HadoopAPIExamples/WordCountPython/reducer.py',
 
-    cmd = HadoopCommand.run(**args)
+    ]
+    input = 's3n://paid-qubole/default-datasets/gutenberg'
+    cmd = ' '.join([
+        'streaming -files %s' % ','.join(files),
+        '-mapper mapper.py',
+        '-reducer reducer.py',
+        '-numReduceTasks 1',
+        '-input %s' % input,
+        '-output %s' % output_path
+    ])
+
+    args = HadoopCommand.parse(cmd.split())
+
+    job = HadoopCommand.run(**args)
 
     print("Streaming Job run via command id: %s, finished with status %s"
-          % (cmd.id, cmd.status))
+          % (job.id, job.status))
 
 
 if __name__ == '__main__':

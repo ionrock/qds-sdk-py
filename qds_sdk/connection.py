@@ -15,6 +15,8 @@ log = logging.getLogger("qds_connection")
 """
 see http://stackoverflow.com/questions/14102416/python-requests-requests-exceptions-sslerror-errno-8-ssl-c504-eof-occurred
 """
+
+
 class MyAdapter(HTTPAdapter):
     def init_poolmanager(self, connections, maxsize,
                          block=False):
@@ -61,7 +63,9 @@ class Connection:
         else:
             x = requests
 
-        kwargs = {'headers': self._headers, 'auth': self.auth, 'verify': not self.skip_ssl_cert_check}
+        kwargs = {'headers': self._headers,
+                  'auth': self.auth,
+                  'verify': not self.skip_ssl_cert_check}
 
         if data:
             kwargs['data'] = cjson.encode(data)

@@ -319,6 +319,7 @@ class HadoopCommand(Command):
     optparser.add_option("--notify", action="store_true", dest="can_notify",
                          default=False, help="sends an email on command completion")
 
+    optparser.disable_interspersed_args()
 
     @classmethod
     def parse(cls, args):
@@ -433,7 +434,7 @@ class ShellCommand(Command):
             if (args is not None) and (len(args) > 0):
                 if options.inline is not None:
                     raise ParseError(
-                        "This sucks - but extra arguments can only be "
+                        "Extra arguments can only be "
                         "supplied with a script_location in S3 right now",
                         cls.optparser.format_help())
 
@@ -517,7 +518,7 @@ class PigCommand(Command):
             if (args is not None) and (len(args) > 0):
                 if options.latin_statements is not None:
                     raise ParseError(
-                        "This sucks - but extra arguments can only be "
+                        "Extra arguments can only be "
                         "supplied with a script_location in S3 right now",
                         cls.optparser.format_help())
 
